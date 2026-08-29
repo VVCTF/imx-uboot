@@ -1,0 +1,66 @@
+{
+  "version": 4,
+  "configurations": [
+    {
+      "name": "U-Boot ARM",
+      "compilerPath": "/home/ctf/tools/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc",
+      "intelliSenseMode": "gcc-arm",
+      "cStandard": "c11",
+      "cppStandard": "gnu++11",
+      "compilerArgs": [
+        "-D__KERNEL__",
+        "-D__UBOOT__",
+        "-D__linux__",
+        "-march=armv7-a",
+        "-mfpu=neon",
+        "-mfloat-abi=hard",
+        "-marm"
+      ],
+      "defines": [
+        "__KERNEL__",
+        "__UBOOT__",
+        "CONFIG_ARM",
+        "CONFIG_MX6",
+        "CONFIG_MX6ULL",
+        "CONFIG_MX6ULL_EVK_EMMC_REWORK",
+        "CONFIG_MX6ULL_ALIENTEK_EMMC",
+        "CONFIG_TARGET_MX6ULL_ALIENTEK_EMMC"
+      ],
+      "includePath": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/include/configs",
+        "${workspaceFolder}/include/generated",
+        "${workspaceFolder}/arch/arm/include",
+        "${workspaceFolder}/arch/arm/include/asm",
+        "${workspaceFolder}/arch/arm/include/asm/arch-mx6",
+        "${workspaceFolder}/arch/arm/include/asm/arch-imx",
+        "${workspaceFolder}/arch/arm/include/asm/arch-mx7",
+        "${workspaceFolder}/board/freescale",
+        "${workspaceFolder}/board/freescale/common",
+        "${workspaceFolder}/board/freescale/mx6ull_alientek_emmc",
+        "${workspaceFolder}/common",
+        "${workspaceFolder}/drivers",
+        "${workspaceFolder}/lib",
+        "${workspaceFolder}/net",
+        "${workspaceFolder}/fs",
+        "${workspaceFolder}/test",
+        "${workspaceFolder}/api",
+        "${workspaceFolder}/arch/arm/cpu/armv7"
+      ],
+      "forcedInclude": [
+        "${workspaceFolder}/include/config.h"
+      ],
+      "browse": {
+        "path": [
+          "${workspaceFolder}",
+          "${workspaceFolder}/include",
+          "${workspaceFolder}/arch/arm/include",
+          "${workspaceFolder}/board/freescale"
+        ],
+        "limitSymbolsToIncludedHeaders": false,
+        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+      }
+    }
+  ]
+}
