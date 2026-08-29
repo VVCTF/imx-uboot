@@ -33,6 +33,8 @@ int board_video_skip(void)
 			if (!strcmp(panel, displays[i].mode.name))
 				break;
 		}
+
+		printf("User has selected panel %s\n", panel);
 	}
 
 	if (i < display_count) {
