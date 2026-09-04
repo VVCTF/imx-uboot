@@ -26,6 +26,7 @@
 #include <asm/arch/imx-regs.h>
 #include <asm/imx-common/sys_proto.h>
 #include <asm/arch/sys_proto.h>
+#include <asm-generic/gpio.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -1252,6 +1253,15 @@ static int fecmxc_probe(struct udevice *dev)
 	priv->bus = bus;
 	priv->xcv_type = CONFIG_FEC_XCV_TYPE;
 	priv->interface = pdata->phy_interface;
+	if (dm_gpio_is_valid(&priv->phy_reset_gpio)) {
+		ret = dm_gpio_set_value(&priv->phy_reset_gpio, 1);
+		if (ret)
+			goto err_phy;
+		mdelay(200);
+		ret = dm_gpio_set_value(&priv->phy_reset_gpio, 0);
+		if (ret)
+			goto err_phy;
+	}
 	ret = fec_phy_init(priv, dev);
 	if (ret)
 		goto err_phy;
@@ -1276,6 +1286,7 @@ static int fecmxc_probe(struct udevice *dev)
 err_timeout:
 	free(priv->phydev);
 err_phy:
+	dm_gpio_free(dev, &priv->phy_reset_gpio);
 	mdio_unregister(bus);
 	free(bus);
 err_mii:
@@ -1287,6 +1298,7 @@ static int fecmxc_remove(struct udevice *dev)
 {
 	struct fec_priv *priv = dev_get_priv(dev);
 
+	dm_gpio_free(dev, &priv->phy_reset_gpio);
 	free(priv->phydev);
 	fec_free_descs(priv);
 	mdio_unregister(priv->bus);
@@ -1300,6 +1312,7 @@ static int fecmxc_ofdata_to_platdata(struct udevice *dev)
 	struct eth_pdata *pdata = dev_get_platdata(dev);
 	struct fec_priv *priv = dev_get_priv(dev);
 	const char *phy_mode;
+	int ret;
 
 	pdata->iobase = (phys_addr_t)dev_get_addr(dev);
 	priv->eth = (struct ethernet_regs *)pdata->iobase;
@@ -1314,10 +1327,10 @@ static int fecmxc_ofdata_to_platdata(struct udevice *dev)
 		return -EINVAL;
 	}
 
-	/* TODO
-	 * Need to get the reset-gpio and related properties from DT
-	 * and implemet the enet reset code on .probe call
-	 */
+	ret = gpio_request_by_name(dev, "phy-reset-gpios", 0,
+				  &priv->phy_reset_gpio, GPIOD_IS_OUT);
+	if (ret && ret != -ENOENT)
+		return ret;
 
 	return 0;
 }

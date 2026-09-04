@@ -254,6 +254,7 @@ struct fec_priv {
 
 #ifdef CONFIG_DM_ETH
 	u32 interface;
+	struct gpio_desc phy_reset_gpio;
 #endif
 };
 
