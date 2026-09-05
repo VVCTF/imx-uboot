@@ -17,6 +17,8 @@
 #ifndef __FEC_MXC_H
 #define __FEC_MXC_H
 
+#include <asm-generic/gpio.h>
+
 /* Layout description of the FEC */
 struct ethernet_regs {
 	/* [10:2]addr = 00 */
